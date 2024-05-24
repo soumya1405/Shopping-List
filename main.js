@@ -32,6 +32,7 @@ function Delete(todoId) {
 function addItem(val) {
     var todoId = val.id;
     var ul = document.getElementById("unorder");
+    ul.classList.add("un")
     //creating list container and added to unorder_list
     var list_container = document.createElement("div");
     list_container.classList.add("cont");
