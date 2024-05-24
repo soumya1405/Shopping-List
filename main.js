@@ -14,7 +14,7 @@ var array = JSON.parse(localStorage.getItem("store")) || [
     { name: "Watch Movie", id: 8 },
     { name: "Read Novel", id: 9 },
     { name: "Talk to friends", id: 10 },
-    { name: "Play ludo", id: 11 }
+    { name: "Play ludo", id: 11 },
 ];
 //const array = JSON.parse(localStorage.getItem("store"));
 var length1 = array.length;
@@ -52,23 +52,45 @@ function addItem(val) {
     };
 }
 //adding addeventlistener to the add button
-Add_button.addEventListener("click", function () {
-    var value = input.value;
-    if (value === "") {
-        alert("enter input");
-    }
-    else {
-        length1 = length1 + 1;
-        var b = {
-            name: value,
-            id: length1
-        };
-        array.push(b);
-        input.value = "";
-        addItem(b);
-        save();
+input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+        // e.preventDefault();
+        var value = input.value;
+        if (value === "") {
+            alert("enter input");
+        }
+        else {
+            length1 = length1 + 1;
+            var b = {
+                name: value,
+                id: length1,
+            };
+            array.push(b);
+            input.value = "";
+            addItem(b);
+            save();
+        }
     }
 });
+// Add_button.addEventListener("click", function () {
+//   let value = input.value;
+//   if (value === "") {
+//     alert("enter input");
+//   } else {
+//     length1 = length1 + 1;
+//     let b: {
+//       name: string;
+//       id: string;
+//     } = {
+//       name: value,
+//       id: length1,
+//     };
+//     array.push(b);
+//     input.value = "";
+//     addItem(b);
+//     save();
+//   }
+// });
 //creating one function to store array  into the localstorage.
 function save() {
     localStorage.setItem("store", JSON.stringify(array));
