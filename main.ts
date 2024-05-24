@@ -34,7 +34,7 @@ function Delete(todoId: string) {
 function addItem(val: { name: string; id: string }) {
   let todoId = val.id;
   let ul = document.getElementById("unorder") as HTMLElement;
-
+   ul.classList.add("un")
   //creating list container and added to unorder_list
   let list_container = document.createElement("div");
   list_container.classList.add("cont");
@@ -47,7 +47,7 @@ function addItem(val: { name: string; id: string }) {
   list_container.appendChild(list_item);
   // creating delete icon and added to list container
   let delete_icon = document.createElement("i");
-  delete_icon.classList.add("bi", "bi-trash3", "del");
+  delete_icon.classList.add("bi", "bi-x", "del");
   list_container.appendChild(delete_icon);
   //giving onclick event to delete icon
   delete_icon.onclick = function () {
