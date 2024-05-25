@@ -36,6 +36,13 @@ function addItem(val) {
     //creating list container and added to unorder_list
     var list_container = document.createElement("div");
     list_container.classList.add("cont");
+    list_container.addEventListener("click", function (e) {
+        var ele = e.target;
+        if (ele.tagName === "LI" || "DIV") {
+            console.log(ele.tagName);
+            list_container.classList.toggle("done");
+        }
+    });
     list_container.id = todoId;
     ul.appendChild(list_container);
     // creating list item and added to list container
