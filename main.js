@@ -39,7 +39,6 @@ function addItem(val) {
     list_container.addEventListener("click", function (e) {
         var ele = e.target;
         if (ele.tagName === "LI" || "DIV") {
-            console.log(ele.tagName);
             list_container.classList.toggle("done");
         }
     });

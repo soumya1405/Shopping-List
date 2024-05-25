@@ -41,7 +41,6 @@ function addItem(val: { name: string; id: string }) {
   list_container.addEventListener("click", function (e: MouseEvent) {
     var ele = e.target as HTMLElement;
     if (ele.tagName === "LI" || "DIV") {
-      console.log(ele.tagName);
       list_container.classList.toggle("done");
     }
   });
