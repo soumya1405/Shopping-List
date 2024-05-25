@@ -34,10 +34,17 @@ function Delete(todoId: string) {
 function addItem(val: { name: string; id: string }) {
   let todoId = val.id;
   let ul = document.getElementById("unorder") as HTMLElement;
-   ul.classList.add("un")
+  ul.classList.add("un");
   //creating list container and added to unorder_list
   let list_container = document.createElement("div");
   list_container.classList.add("cont");
+  list_container.addEventListener("click", function (e: MouseEvent) {
+    var ele = e.target as HTMLElement;
+    if (ele.tagName === "LI" || "DIV") {
+      console.log(ele.tagName);
+      list_container.classList.toggle("done");
+    }
+  });
   list_container.id = todoId;
   ul.appendChild(list_container);
   // creating list item and added to list container
