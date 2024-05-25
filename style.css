@@ -19,12 +19,19 @@
 .del {
   padding: 20px;
   margin-top: -3px;
+  /* color: white; */
+  font-size: xx-large;
+  font-weight: bold;
 }
 .cont {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  color:White;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   padding: 5px;
   width: 50%;
   height: 30px;
@@ -42,6 +49,6 @@
   margin-right: 30px;
 }
 .done {
-  background-color: green;
+  background-color: lightgreen;
   text-decoration: line-through;
 }
