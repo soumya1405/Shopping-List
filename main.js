@@ -1,6 +1,7 @@
 var input = document.getElementById("in");
 var Add_button = document.getElementById("add");
 var unordered_list = document.createElement("ul");
+var list1 = [];
 unordered_list.id = "unorder";
 document.body.appendChild(unordered_list);
 var array = JSON.parse(localStorage.getItem("store")) || [
@@ -38,9 +39,24 @@ function addItem(val) {
     list_container.classList.add("cont");
     list_container.addEventListener("click", function (e) {
         var ele = e.target;
-        if (ele.tagName === "LI" || "DIV") {
+        if (ele.tagName === "LI") {
             list_container.classList.toggle("done");
+            if (list_container.classList.contains("done")) {
+                list1.push(ele.tagName);
+                console.log("sele", list1);
+                span1.innerHTML = "Selected Items count : ".concat(list1.length);
+                var unS = array.length - list1.length;
+                span2.innerHTML = "UnSelected Items count :".concat(String(unS));
+            }
+            else {
+                list1.pop(ele.tagName);
+                console.log("sele", list1);
+                span1.innerHTML = "Selected Items count : ".concat(list1.length);
+                var unS = array.length - list1.length;
+                span2.innerHTML = "UnSelected Items count :".concat(String(unS));
+            }
         }
+        save();
     });
     list_container.id = todoId;
     ul.appendChild(list_container);
@@ -58,6 +74,17 @@ function addItem(val) {
         Delete(todoId);
     };
 }
+var div = document.createElement("div");
+div.classList.add("container");
+document.body.appendChild(div);
+var span1 = document.createElement("span");
+span1.textContent = "Selected Items count : ".concat(list1.length);
+span1.id = "span1";
+div.appendChild(span1);
+var span2 = document.createElement("span");
+span2.textContent = "UnSelected Items count : ".concat(array.length - list1.length, " ");
+span2.id = "span2";
+div.appendChild(span2);
 //adding addeventlistener to the add button
 input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
@@ -72,6 +99,7 @@ input.addEventListener("keydown", function (e) {
                 id: length1,
             };
             array.push(b);
+            span2.innerHTML = String(array.length - list1.length);
             input.value = "";
             addItem(b);
             save();
