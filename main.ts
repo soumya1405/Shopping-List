@@ -5,7 +5,7 @@ let check = document.createElement("input") as HTMLInputElement;
 check.type = "checkbox";
 check.id = "checkId";
 document.body.appendChild(check);
-let list1 = JSON.parse(localStorage.getItem("list")!)||[];
+let list1:any = [];
 unordered_list.id = "unorder";
 document.body.appendChild(unordered_list);
 const array = JSON.parse(localStorage.getItem("store")!) || JSON.parse(localStorage.getItem("list")!) || [
@@ -30,23 +30,18 @@ for (let val of array) {
 function Delete(todoId: string) {
   let del = document.getElementById(todoId) as HTMLElement;
   unordered_list.removeChild(del);
-  unordered_list.removeChild(check);
   let index = array.findIndex(
     (value: { name: string; id: string }) => value.id === todoId
   );
   array.splice(index, 1);
   save();
+  // span3.textContent = `Total Items Count : ${array.length} `;
 }
 function addItem(val: { name: string; id: string }) {
   let todoId = `todo+${val.id}`;
   let checkId = val.id;
   let ul = document.getElementById("unorder") as HTMLElement;
   ul.classList.add("un");
-  // let check = document.createElement("input") as HTMLInputElement;
-  // check.type = "checkbox";
-  // check.id = checkId;
-  // ul.appendChild(check);
-  //creating list container and added to unorder_list
   let list_container = document.createElement("div");
   list_container.classList.add("cont");
   list_container.addEventListener("click", function (e: MouseEvent) {
@@ -87,7 +82,7 @@ function addItem(val: { name: string; id: string }) {
     console.log(checkbox);
     var isChecked = checkbox.checked;
     var C = e.target as HTMLElement;
-    if (isChecked && list_container.classList.contains("done,cont")) {
+    if (isChecked && list_container.classList.contains("done")) {
       list_container.style.display = "none";
     } else {
       list_container.style.display = "block";
@@ -141,5 +136,4 @@ input.addEventListener("keydown", function (e) {
 //creating one function to store array  into the localstorage.
 function save() {
   localStorage.setItem("store", JSON.stringify(array));
-  localStorage.setItem("list", JSON.stringify(list1));
 }
