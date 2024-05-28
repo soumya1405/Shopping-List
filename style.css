@@ -1,3 +1,14 @@
+.heading-element{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:cornflowerblue ;
+  font-size: 50px;
+  font-weight: bold;
+  padding-top: 30px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 .todo--container {
   display: flex;
   align-items: center;
