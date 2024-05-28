@@ -1,10 +1,14 @@
 var input = document.getElementById("in");
 var Add_button = document.getElementById("add");
 var unordered_list = document.createElement("ul");
-var list1 = [];
+var check = document.createElement("input");
+check.type = "checkbox";
+check.id = "checkId";
+document.body.appendChild(check);
+var list1 = JSON.parse(localStorage.getItem("list")) || [];
 unordered_list.id = "unorder";
 document.body.appendChild(unordered_list);
-var array = JSON.parse(localStorage.getItem("store")) || [
+var array = JSON.parse(localStorage.getItem("store")) || JSON.parse(localStorage.getItem("list")) || [
     { name: "Cook Biryani", id: 1 },
     { name: "Go to Gym", id: 2 },
     { name: "Study Javascript", id: 3 },
@@ -23,9 +27,8 @@ for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
     var val = array_1[_i];
     addItem(val);
 }
-function Delete(todoId, checkId) {
+function Delete(todoId) {
     var del = document.getElementById(todoId);
-    var check = document.getElementById(checkId);
     unordered_list.removeChild(del);
     unordered_list.removeChild(check);
     var index = array.findIndex(function (value) { return value.id === todoId; });
@@ -37,10 +40,10 @@ function addItem(val) {
     var checkId = val.id;
     var ul = document.getElementById("unorder");
     ul.classList.add("un");
-    var check = document.createElement("input");
-    check.type = "checkbox";
-    check.id = checkId;
-    ul.appendChild(check);
+    // let check = document.createElement("input") as HTMLInputElement;
+    // check.type = "checkbox";
+    // check.id = checkId;
+    // ul.appendChild(check);
     //creating list container and added to unorder_list
     var list_container = document.createElement("div");
     list_container.classList.add("cont");
@@ -50,19 +53,15 @@ function addItem(val) {
             list_container.classList.toggle("done");
             if (list_container.classList.contains("done")) {
                 list1.push(ele.tagName);
-                //  console.log("sele", list1);
                 span1.innerHTML = "Selected Items count : ".concat(list1.length);
                 var unS = array.length - list1.length;
                 span2.innerHTML = "UnSelected Items count :".concat(String(unS));
-                //  span3.innerHTML = `Total Items Count : ${array.length} `;
             }
             else {
                 list1.pop(ele.tagName);
-                //  console.log("sele", list1);
                 span1.innerHTML = "Selected Items count : ".concat(list1.length);
                 var unS = array.length - list1.length;
                 span2.innerHTML = "UnSelected Items count :".concat(String(unS));
-                //  span3.innerHTML = `Total Items Count : ${array.length} `;
             }
         }
         span3.textContent = "Total Items Count : ".concat(array.length, " ");
@@ -80,15 +79,14 @@ function addItem(val) {
     list_container.appendChild(delete_icon);
     //giving onclick event to delete icon
     delete_icon.onclick = function () {
-        Delete(todoId, checkId);
+        Delete(todoId);
     };
-    var checkbox = document.getElementById(checkId);
+    var checkbox = document.getElementById("checkId");
     checkbox.addEventListener("change", function (e) {
         console.log(checkbox);
         var isChecked = checkbox.checked;
         var C = e.target;
-        if (isChecked) {
-            console.log("id is:", checkId);
+        if (isChecked && list_container.classList.contains("done,cont")) {
             list_container.style.display = "none";
         }
         else {
@@ -135,4 +133,5 @@ input.addEventListener("keydown", function (e) {
 //creating one function to store array  into the localstorage.
 function save() {
     localStorage.setItem("store", JSON.stringify(array));
+    localStorage.setItem("list", JSON.stringify(list1));
 }
