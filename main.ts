@@ -1,10 +1,14 @@
 let input = document.getElementById("in") as HTMLInputElement;
 let Add_button = document.getElementById("add") as HTMLButtonElement;
 let unordered_list = document.createElement("ul") as HTMLUListElement;
-let list1:any = [];
+let check = document.createElement("input") as HTMLInputElement;
+check.type = "checkbox";
+check.id = "checkId";
+document.body.appendChild(check);
+let list1 = JSON.parse(localStorage.getItem("list")!)||[];
 unordered_list.id = "unorder";
 document.body.appendChild(unordered_list);
-const array = JSON.parse(localStorage.getItem("store")!) || [
+const array = JSON.parse(localStorage.getItem("store")!) || JSON.parse(localStorage.getItem("list")!) || [
   { name: "Cook Biryani", id: 1 },
   { name: "Go to Gym", id: 2 },
   { name: "Study Javascript", id: 3 },
@@ -23,9 +27,8 @@ for (let val of array) {
   addItem(val);
 }
 
-function Delete(todoId: string,checkId:string) {
+function Delete(todoId: string) {
   let del = document.getElementById(todoId) as HTMLElement;
-  let check = document.getElementById(checkId) as HTMLElement
   unordered_list.removeChild(del);
   unordered_list.removeChild(check);
   let index = array.findIndex(
@@ -39,34 +42,30 @@ function addItem(val: { name: string; id: string }) {
   let checkId = val.id;
   let ul = document.getElementById("unorder") as HTMLElement;
   ul.classList.add("un");
-  let check = document.createElement("input") as HTMLInputElement;
-  check.type = "checkbox";
-  check.id = checkId;
-  ul.appendChild(check);
+  // let check = document.createElement("input") as HTMLInputElement;
+  // check.type = "checkbox";
+  // check.id = checkId;
+  // ul.appendChild(check);
   //creating list container and added to unorder_list
   let list_container = document.createElement("div");
   list_container.classList.add("cont");
   list_container.addEventListener("click", function (e: MouseEvent) {
-  var ele = e.target as HTMLElement;
+    var ele = e.target as HTMLElement;
     if (ele.tagName === "LI") {
       list_container.classList.toggle("done");
-      if(list_container.classList.contains("done")){
-         list1.push(ele.tagName);
-        //  console.log("sele", list1);
-         span1.innerHTML = `Selected Items count : ${list1.length}`;
-         var unS = array.length - list1.length
-         span2.innerHTML = `UnSelected Items count :${String(unS)}`;
-        //  span3.innerHTML = `Total Items Count : ${array.length} `;
-       }else{
-         list1.pop(ele.tagName);
-        //  console.log("sele", list1);
-         span1.innerHTML= `Selected Items count : ${list1.length}`
-         var unS = array.length - list1.length
-         span2.innerHTML = `UnSelected Items count :${String(unS)}`;
-        //  span3.innerHTML = `Total Items Count : ${array.length} `;
+      if (list_container.classList.contains("done")) {
+        list1.push(ele.tagName);
+        span1.innerHTML = `Selected Items count : ${list1.length}`;
+        var unS = array.length - list1.length;
+        span2.innerHTML = `UnSelected Items count :${String(unS)}`;
+      } else {
+        list1.pop(ele.tagName);
+        span1.innerHTML = `Selected Items count : ${list1.length}`;
+        var unS = array.length - list1.length;
+        span2.innerHTML = `UnSelected Items count :${String(unS)}`;
       }
     }
-     span3.textContent = `Total Items Count : ${array.length} `;
+    span3.textContent = `Total Items Count : ${array.length} `;
   });
   list_container.id = todoId;
   ul.appendChild(list_container);
@@ -81,26 +80,25 @@ function addItem(val: { name: string; id: string }) {
   list_container.appendChild(delete_icon);
   //giving onclick event to delete icon
   delete_icon.onclick = function () {
-    Delete(todoId,checkId);
+    Delete(todoId);
   };
-  let checkbox = <HTMLInputElement> document.getElementById(checkId);
-      checkbox.addEventListener( "change", (e) => {
-       console.log(checkbox);
-        var isChecked = checkbox.checked;
-        var C = e.target as HTMLElement;
-        if (isChecked) {
-           console.log("id is:" ,checkId);
-            list_container.style.display = "none";
-         } 
-        else {
-          list_container.style.display="block";
-         }
-      });
+  let checkbox = <HTMLInputElement>document.getElementById("checkId");
+  checkbox.addEventListener("change", (e) => {
+    console.log(checkbox);
+    var isChecked = checkbox.checked;
+    var C = e.target as HTMLElement;
+    if (isChecked && list_container.classList.contains("done,cont")) {
+      list_container.style.display = "none";
+    } else {
+      list_container.style.display = "block";
+    }
+  });
 }
 
 let div = document.createElement("div") as HTMLDivElement;
 div.classList.add("container");
 document.body.appendChild(div);
+
 let span1 = document.createElement("span") as HTMLSpanElement;
 span1.textContent = `Selected Items count : ${list1.length}`;
 span1.id = "span1";
@@ -115,8 +113,6 @@ let span3 = document.createElement("span") as HTMLSpanElement;
 span3.textContent = `Total Items Count : ${array.length}`;
 span3.id = "span3";
 div.appendChild(span3);
-
-
 
 //adding addeventlistener to the add button
 input.addEventListener("keydown", function (e) {
@@ -145,4 +141,5 @@ input.addEventListener("keydown", function (e) {
 //creating one function to store array  into the localstorage.
 function save() {
   localStorage.setItem("store", JSON.stringify(array));
+  localStorage.setItem("list", JSON.stringify(list1));
 }
