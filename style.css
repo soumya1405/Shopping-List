@@ -64,3 +64,9 @@
       margin-top: 100px;
       margin-right: 70px;
 }
+.display{
+  display: none;
+}
+.display1{
+  display: block;
+}
