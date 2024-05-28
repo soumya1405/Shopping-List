@@ -23,17 +23,24 @@ for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
     var val = array_1[_i];
     addItem(val);
 }
-function Delete(todoId) {
+function Delete(todoId, checkId) {
     var del = document.getElementById(todoId);
+    var check = document.getElementById(checkId);
     unordered_list.removeChild(del);
+    unordered_list.removeChild(check);
     var index = array.findIndex(function (value) { return value.id === todoId; });
     array.splice(index, 1);
     save();
 }
 function addItem(val) {
-    var todoId = val.id;
+    var todoId = "todo+".concat(val.id);
+    var checkId = val.id;
     var ul = document.getElementById("unorder");
     ul.classList.add("un");
+    var check = document.createElement("input");
+    check.type = "checkbox";
+    check.id = checkId;
+    ul.appendChild(check);
     //creating list container and added to unorder_list
     var list_container = document.createElement("div");
     list_container.classList.add("cont");
@@ -43,20 +50,22 @@ function addItem(val) {
             list_container.classList.toggle("done");
             if (list_container.classList.contains("done")) {
                 list1.push(ele.tagName);
-                console.log("sele", list1);
+                //  console.log("sele", list1);
                 span1.innerHTML = "Selected Items count : ".concat(list1.length);
                 var unS = array.length - list1.length;
                 span2.innerHTML = "UnSelected Items count :".concat(String(unS));
+                //  span3.innerHTML = `Total Items Count : ${array.length} `;
             }
             else {
                 list1.pop(ele.tagName);
-                console.log("sele", list1);
+                //  console.log("sele", list1);
                 span1.innerHTML = "Selected Items count : ".concat(list1.length);
                 var unS = array.length - list1.length;
                 span2.innerHTML = "UnSelected Items count :".concat(String(unS));
+                //  span3.innerHTML = `Total Items Count : ${array.length} `;
             }
         }
-        save();
+        span3.textContent = "Total Items Count : ".concat(array.length, " ");
     });
     list_container.id = todoId;
     ul.appendChild(list_container);
@@ -65,14 +74,27 @@ function addItem(val) {
     list_item.id = "item";
     list_item.textContent = val.name;
     list_container.appendChild(list_item);
-    // creating delete icon and added to list container
+    // creating delete icon and added to list containerx
     var delete_icon = document.createElement("i");
     delete_icon.classList.add("bi", "bi-x", "del");
     list_container.appendChild(delete_icon);
     //giving onclick event to delete icon
     delete_icon.onclick = function () {
-        Delete(todoId);
+        Delete(todoId, checkId);
     };
+    var checkbox = document.getElementById(checkId);
+    checkbox.addEventListener("change", function (e) {
+        console.log(checkbox);
+        var isChecked = checkbox.checked;
+        var C = e.target;
+        if (isChecked) {
+            console.log("id is:", checkId);
+            list_container.style.display = "none";
+        }
+        else {
+            list_container.style.display = "block";
+        }
+    });
 }
 var div = document.createElement("div");
 div.classList.add("container");
@@ -85,6 +107,10 @@ var span2 = document.createElement("span");
 span2.textContent = "UnSelected Items count : ".concat(array.length - list1.length, " ");
 span2.id = "span2";
 div.appendChild(span2);
+var span3 = document.createElement("span");
+span3.textContent = "Total Items Count : ".concat(array.length);
+span3.id = "span3";
+div.appendChild(span3);
 //adding addeventlistener to the add button
 input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
@@ -99,7 +125,7 @@ input.addEventListener("keydown", function (e) {
                 id: length1,
             };
             array.push(b);
-            span2.innerHTML = String(array.length - list1.length);
+            span3.textContent = "Total Items Count : ".concat(array.length, " ");
             input.value = "";
             addItem(b);
             save();
