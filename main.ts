@@ -23,9 +23,11 @@ for (let val of array) {
   addItem(val);
 }
 
-function Delete(todoId: string) {
+function Delete(todoId: string,checkId:string) {
   let del = document.getElementById(todoId) as HTMLElement;
+  let check = document.getElementById(checkId) as HTMLElement
   unordered_list.removeChild(del);
+  unordered_list.removeChild(check);
   let index = array.findIndex(
     (value: { name: string; id: string }) => value.id === todoId
   );
@@ -33,9 +35,14 @@ function Delete(todoId: string) {
   save();
 }
 function addItem(val: { name: string; id: string }) {
-  let todoId = val.id;
+  let todoId = `todo+${val.id}`;
+  let checkId = val.id;
   let ul = document.getElementById("unorder") as HTMLElement;
   ul.classList.add("un");
+  let check = document.createElement("input") as HTMLInputElement;
+  check.type = "checkbox";
+  check.id = checkId;
+  ul.appendChild(check);
   //creating list container and added to unorder_list
   let list_container = document.createElement("div");
   list_container.classList.add("cont");
@@ -45,19 +52,21 @@ function addItem(val: { name: string; id: string }) {
       list_container.classList.toggle("done");
       if(list_container.classList.contains("done")){
          list1.push(ele.tagName);
-         console.log("sele", list1);
+        //  console.log("sele", list1);
          span1.innerHTML = `Selected Items count : ${list1.length}`;
          var unS = array.length - list1.length
          span2.innerHTML = `UnSelected Items count :${String(unS)}`;
+        //  span3.innerHTML = `Total Items Count : ${array.length} `;
        }else{
          list1.pop(ele.tagName);
-         console.log("sele", list1);
+        //  console.log("sele", list1);
          span1.innerHTML= `Selected Items count : ${list1.length}`
          var unS = array.length - list1.length
          span2.innerHTML = `UnSelected Items count :${String(unS)}`;
+        //  span3.innerHTML = `Total Items Count : ${array.length} `;
       }
     }
-    save();
+     span3.textContent = `Total Items Count : ${array.length} `;
   });
   list_container.id = todoId;
   ul.appendChild(list_container);
@@ -66,15 +75,29 @@ function addItem(val: { name: string; id: string }) {
   list_item.id = "item";
   list_item.textContent = val.name;
   list_container.appendChild(list_item);
-  // creating delete icon and added to list container
+  // creating delete icon and added to list containerx
   let delete_icon = document.createElement("i");
   delete_icon.classList.add("bi", "bi-x", "del");
   list_container.appendChild(delete_icon);
   //giving onclick event to delete icon
   delete_icon.onclick = function () {
-    Delete(todoId);
+    Delete(todoId,checkId);
   };
+  let checkbox = <HTMLInputElement> document.getElementById(checkId);
+      checkbox.addEventListener( "change", (e) => {
+       console.log(checkbox);
+        var isChecked = checkbox.checked;
+        var C = e.target as HTMLElement;
+        if (isChecked) {
+           console.log("id is:" ,checkId);
+            list_container.style.display = "none";
+         } 
+        else {
+          list_container.style.display="block";
+         }
+      });
 }
+
 let div = document.createElement("div") as HTMLDivElement;
 div.classList.add("container");
 document.body.appendChild(div);
@@ -87,6 +110,11 @@ let span2 = document.createElement("span") as HTMLSpanElement;
 span2.textContent = `UnSelected Items count : ${array.length - list1.length} `;
 span2.id = "span2";
 div.appendChild(span2);
+
+let span3 = document.createElement("span") as HTMLSpanElement;
+span3.textContent = `Total Items Count : ${array.length}`;
+span3.id = "span3";
+div.appendChild(span3);
 
 
 
@@ -106,7 +134,7 @@ input.addEventListener("keydown", function (e) {
         id: length1,
       };
       array.push(b);
-      span2.innerHTML =String(array.length-list1.length);
+      span3.textContent = `Total Items Count : ${array.length} `;
       input.value = "";
       addItem(b);
       save();
