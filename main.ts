@@ -5,7 +5,12 @@ document.body.appendChild(unordered_list);
 
 let selectedItemsList: string[] = [];
 
-const array = JSON.parse(localStorage.getItem("store")!) ||
+type arrayType = {
+  name: string;
+  id: string;
+};
+
+const itemsArray: arrayType[] = JSON.parse(localStorage.getItem("store")!) ||
   JSON.parse(localStorage.getItem("list")!) || [
     { name: "Cook Biryani", id: 1 },
     { name: "Go to Gym", id: 2 },
@@ -31,28 +36,28 @@ div.appendChild(selectedItemsCount);
 
 let unSelectedItemsCount = document.createElement("span") as HTMLSpanElement;
 unSelectedItemsCount.textContent = `UnSelected Items count : ${
-  array.length - selectedItemsList.length
+  itemsArray.length - selectedItemsList.length
 }`;
 unSelectedItemsCount.id = "span2";
 div.appendChild(unSelectedItemsCount);
 
 let totalItemsCount = document.createElement("span") as HTMLSpanElement;
-totalItemsCount.textContent = `Total Items Count : ${array.length}`;
+totalItemsCount.textContent = `Total Items Count : ${itemsArray.length}`;
 totalItemsCount.id = "span3";
 div.appendChild(totalItemsCount);
 
-let arrayLength: string = array.length;
-for (let val of array) {
+let arrayLength = String(itemsArray.length);
+for (let val of itemsArray) {
   addItem(val);
 }
 //delete function to delete items from the unordered list.
 function Delete(todoId: string) {
   let del = document.getElementById(todoId) as HTMLElement;
   unordered_list.removeChild(del);
-  let index = array.findIndex(
+  let index = itemsArray.findIndex(
     (value: { name: string; id: string }) => value.id === todoId
   );
-  array.splice(index, 1);
+  itemsArray.splice(index, 1);
   save();
 }
 function addItem(val: { name: string; id: string }) {
@@ -69,15 +74,15 @@ function addItem(val: { name: string; id: string }) {
       if (list_container.classList.contains("done")) {
         selectedItemsList.push(element.tagName);
         selectedItemsCount.innerHTML = `Selected Items count : ${selectedItemsList.length}`;
-        var unSelected = array.length - selectedItemsList.length;
+        var unSelected = itemsArray.length - selectedItemsList.length;
         unSelectedItemsCount.innerHTML = `UnSelected Items count :${unSelected}`;
       } else {
         selectedItemsList.pop();
         selectedItemsCount.innerHTML = `Selected Items count : ${selectedItemsList.length}`;
-        var unSelected = array.length - selectedItemsList.length;
+        var unSelected = itemsArray.length - selectedItemsList.length;
         unSelectedItemsCount.innerHTML = `UnSelected Items count :${unSelected}`;
       }
-      totalItemsCount.textContent = `Total Items Count : ${array.length} `;
+      totalItemsCount.textContent = `Total Items Count : ${itemsArray.length} `;
     }
   });
   list_container.id = todoId;
@@ -121,8 +126,8 @@ inputElement.addEventListener("keydown", function (e) {
         name: value,
         id: arrayLength,
       };
-      array.push(newItem);
-      totalItemsCount.textContent = `Total Items Count : ${array.length} `;
+      itemsArray.push(newItem);
+      totalItemsCount.textContent = `Total Items Count : ${itemsArray.length} `;
       inputElement.value = "";
       addItem(newItem);
       save();
@@ -132,5 +137,5 @@ inputElement.addEventListener("keydown", function (e) {
 
 //creating one function to store array  into the localstorage.
 function save() {
-  localStorage.setItem("store", JSON.stringify(array));
+  localStorage.setItem("store", JSON.stringify(itemsArray));
 }
