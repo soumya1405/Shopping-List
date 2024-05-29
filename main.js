@@ -3,7 +3,7 @@ var unordered_list = document.createElement("ul");
 unordered_list.id = "unorderList";
 document.body.appendChild(unordered_list);
 var selectedItemsList = [];
-var array = JSON.parse(localStorage.getItem("store")) ||
+var itemsArray = JSON.parse(localStorage.getItem("store")) ||
     JSON.parse(localStorage.getItem("list")) || [
     { name: "Cook Biryani", id: 1 },
     { name: "Go to Gym", id: 2 },
@@ -25,24 +25,24 @@ selectedItemsCount.textContent = "Selected Items count : ".concat(selectedItemsL
 selectedItemsCount.id = "span1";
 div.appendChild(selectedItemsCount);
 var unSelectedItemsCount = document.createElement("span");
-unSelectedItemsCount.textContent = "UnSelected Items count : ".concat(array.length - selectedItemsList.length);
+unSelectedItemsCount.textContent = "UnSelected Items count : ".concat(itemsArray.length - selectedItemsList.length);
 unSelectedItemsCount.id = "span2";
 div.appendChild(unSelectedItemsCount);
 var totalItemsCount = document.createElement("span");
-totalItemsCount.textContent = "Total Items Count : ".concat(array.length);
+totalItemsCount.textContent = "Total Items Count : ".concat(itemsArray.length);
 totalItemsCount.id = "span3";
 div.appendChild(totalItemsCount);
-var arrayLength = array.length;
-for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
-    var val = array_1[_i];
+var arrayLength = itemsArray.length;
+for (var _i = 0, itemsArray_1 = itemsArray; _i < itemsArray_1.length; _i++) {
+    var val = itemsArray_1[_i];
     addItem(val);
 }
 //delete function to delete items from the unordered list.
 function Delete(todoId) {
     var del = document.getElementById(todoId);
     unordered_list.removeChild(del);
-    var index = array.findIndex(function (value) { return value.id === todoId; });
-    array.splice(index, 1);
+    var index = itemsArray.findIndex(function (value) { return value.id === todoId; });
+    itemsArray.splice(index, 1);
     save();
 }
 function addItem(val) {
@@ -59,16 +59,16 @@ function addItem(val) {
             if (list_container.classList.contains("done")) {
                 selectedItemsList.push(element.tagName);
                 selectedItemsCount.innerHTML = "Selected Items count : ".concat(selectedItemsList.length);
-                var unSelected = array.length - selectedItemsList.length;
+                var unSelected = itemsArray.length - selectedItemsList.length;
                 unSelectedItemsCount.innerHTML = "UnSelected Items count :".concat(unSelected);
             }
             else {
                 selectedItemsList.pop();
                 selectedItemsCount.innerHTML = "Selected Items count : ".concat(selectedItemsList.length);
-                var unSelected = array.length - selectedItemsList.length;
+                var unSelected = itemsArray.length - selectedItemsList.length;
                 unSelectedItemsCount.innerHTML = "UnSelected Items count :".concat(unSelected);
             }
-            totalItemsCount.textContent = "Total Items Count : ".concat(array.length, " ");
+            totalItemsCount.textContent = "Total Items Count : ".concat(itemsArray.length, " ");
         }
     });
     list_container.id = todoId;
@@ -111,8 +111,8 @@ inputElement.addEventListener("keydown", function (e) {
                 name: value,
                 id: arrayLength,
             };
-            array.push(newItem);
-            totalItemsCount.textContent = "Total Items Count : ".concat(array.length, " ");
+            itemsArray.push(newItem);
+            totalItemsCount.textContent = "Total Items Count : ".concat(itemsArray.length, " ");
             inputElement.value = "";
             addItem(newItem);
             save();
@@ -121,5 +121,5 @@ inputElement.addEventListener("keydown", function (e) {
 });
 //creating one function to store array  into the localstorage.
 function save() {
-    localStorage.setItem("store", JSON.stringify(array));
+    localStorage.setItem("store", JSON.stringify(itemsArray));
 }
